@@ -7,6 +7,7 @@ import { useOrganizationStore } from "@/store/organization.store";
 import { useProjectStore } from "@/store/project.store";
 import { useAuthStore } from "@/store/auth.store";
 import { Plus, Briefcase, Calendar, Target, Settings as SettingsIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function OrganizationPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
