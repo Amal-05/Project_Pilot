@@ -1,0 +1,195 @@
+Build a production-grade, enterprise-level AI-Powered Project Management Platform called ProjectPilot. The platform should combine the best features of Jira, Trello, ClickUp, Notion, and Asana into a single modern web application.
+
+The application must be scalable, secure, responsive, and suitable for large organizations.
+
+TECH STACK
+Frontend: Next.js 15, React, TypeScript, Tailwind CSS, ShadCN UI, Zustand, TanStack Query, Framer Motion
+Backend: Node.js, Express.js, TypeScript
+Database: PostgreSQL, Prisma ORM
+Authentication: JWT, Google OAuth
+Realtime: Socket.io
+Caching: Redis
+Storage: Cloudinary
+AI: OpenAI API
+Deployment: Docker, Docker Compose
+
+AUTHENTICATION & USER MANAGEMENT
+- Registration
+- Login
+- Google OAuth
+- Password Reset
+- Email Verification
+- Session Management
+- Rate Limiting
+- Secure Cookies
+
+ROLES
+- Super Admin
+- Organization Admin
+- Project Manager
+- Team Member
+- Client
+
+ORGANIZATION MANAGEMENT
+- Create/Edit Organization
+- Invite Members
+- Assign Roles
+- Manage Permissions
+- Productivity Dashboard
+
+PROJECT MANAGEMENT
+- Create Projects
+- Project Dashboard
+- Budget Tracking
+- Resource Allocation
+- Timeline Management
+
+TASK MANAGEMENT
+- Tasks
+- Subtasks
+- Checklists
+- Dependencies
+- Time Tracking
+- Comments
+- Attachments
+- Activity Logs
+
+KANBAN BOARD
+- Drag and Drop
+- Realtime Updates
+- Filters
+- Labels
+- Swimlanes
+
+SPRINT MANAGEMENT
+- Sprint Planning
+- Backlogs
+- Burndown Charts
+- Velocity Tracking
+
+TEAM COLLABORATION
+- Organization Chat
+- Project Chat
+- Direct Messages
+- File Sharing
+- Read Receipts
+
+NOTIFICATIONS
+- Realtime Notifications
+- Email Notifications
+- Mentions
+- Deadlines
+
+CALENDAR
+- Daily/Weekly/Monthly Views
+- Meetings
+- Deadlines
+- Milestones
+
+MEETING MANAGEMENT
+- Schedule Meetings
+- Meeting Notes
+- Action Items
+- Meeting History
+
+AI FEATURES
+- AI Project Generator
+- AI Task Generator
+- AI Sprint Planner
+- AI Risk Analyzer
+- AI Meeting Notes Generator
+- AI Productivity Assistant
+
+GANTT CHARTS
+- Timelines
+- Milestones
+- Dependencies
+- Critical Path Analysis
+
+ANALYTICS
+- Team Productivity
+- Project Progress
+- Resource Utilization
+- Sprint Velocity
+- Risk Analysis
+
+DOCUMENT MANAGEMENT
+- Upload Files
+- Version History
+- Folder Structure
+- Shared Documents
+
+WIKI & KNOWLEDGE BASE
+- Articles
+- Categories
+- Markdown Support
+- Search
+- Version Control
+
+GLOBAL SEARCH
+- Projects
+- Tasks
+- Users
+- Documents
+- Messages
+- Wiki Pages
+
+DASHBOARDS
+- Personal Dashboard
+- Manager Dashboard
+- Admin Dashboard
+
+AUDIT LOGGING
+- User Actions
+- Project Changes
+- Permission Changes
+- Login Activity
+
+SECURITY
+- RBAC
+- XSS Protection
+- SQL Injection Protection
+- CSRF Protection
+- Encryption
+
+UI/UX
+- Modern Design
+- Dark Mode
+- Light Mode
+- Responsive Layout
+- Accessibility Support
+
+API REQUIREMENTS
+- REST APIs
+- Swagger Documentation
+- Validation
+- Error Handling
+
+TESTING
+- Jest
+- Supertest
+- Playwright
+
+DEVOPS
+- Docker
+- Docker Compose
+- Logging
+- Backup Strategy
+
+DELIVERABLES
+1. Folder Structure
+2. Database Schema
+3. Prisma Models
+4. Authentication
+5. APIs
+6. Frontend
+7. Realtime Features
+8. AI Services
+9. Docker Setup
+10. Testing Setup
+11. Swagger Docs
+12. Deployment Guide
+13. Seed Data
+14. Production Ready Code
+
+Use clean architecture, SOLID principles, reusable components, enterprise-grade security, and scalable design throughout the application.
