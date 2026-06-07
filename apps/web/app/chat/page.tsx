@@ -5,7 +5,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useChatStore } from "@/store/chat.store";
 import { useAuthStore } from "@/store/auth.store";
-import { Send, User as UserIcon, Building2, Search, MoreVertical } from "lucide-react";
+import { Send, User as UserIcon, Building2, Search, MoreVertical, MessageSquare } from "lucide-react";
 
 export default function ChatPage() {
   const { user } = useAuthStore();
