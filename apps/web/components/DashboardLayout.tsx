@@ -58,7 +58,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     <div className="flex h-screen bg-gray-50 text-gray-900">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
-...
+        <div className="p-6 border-b border-gray-100">
+          <h1 className="text-xl font-bold text-blue-600">ProjectPilot</h1>
+        </div>
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="flex items-center px-3 py-2.5 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 font-medium group"
+            >
+              <item.icon className="w-5 h-5 mr-3 group-hover:text-blue-600" />
+              {item.name}
+            </Link>
+          ))}
         </nav>
         
         <div className="p-4 border-t border-gray-200">
