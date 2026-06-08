@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import api from '../lib/api';
-import { io, Socket } from 'socket.io-client';
+import type { Socket } from 'socket.io-client';
 
 export type TaskStatus = 'BACKLOG' | 'TODO' | 'IN_PROGRESS' | 'IN_REVIEW' | 'DONE';
 export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
@@ -97,9 +97,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
-  initSocket: (projectId) => {
+  initSocket: async (projectId) => {
     if (get().socket) return;
 
+    const { io } = await import('socket.io-client');
     const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:4000');
     
     socket.emit('join-project', projectId);
