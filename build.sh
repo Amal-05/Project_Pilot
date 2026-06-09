@@ -11,12 +11,12 @@ cd ../..
 
 echo "=== Building validation package ==="
 cd packages/validation
-npx tsc --skipLibCheck || echo "Validation build warnings ignored"
+../../node_modules/.bin/tsc --skipLibCheck || echo "Validation build warnings ignored"
 cd ../..
 
 echo "=== Building API ==="
 cd apps/api
-npx tsc --skipLibCheck
+../../node_modules/.bin/tsc --skipLibCheck
 cd ../..
 
 echo "=== Build complete ==="
