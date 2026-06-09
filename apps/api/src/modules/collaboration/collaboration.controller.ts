@@ -14,7 +14,7 @@ export class CollaborationController {
       const result = await collaborationService.createConversation(req.user.userId, validatedData);
       
       // Notify participants via socket if they are online
-      result.participants.forEach((p: any) => {
+      (result as any).participants?.forEach((p: any) => {
         io.to(`user:${p.userId}`).emit('conversation:created', result);
       });
 

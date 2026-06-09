@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { AuthRepository } from './auth.repository';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../../utils/jwt';
-import { RegisterInput, LoginInput, ForgotPasswordInput, ResetPasswordInput } from '@project-pilot/validation';
+import { RegisterInput, LoginInput, ForgotPasswordInput } from '@project-pilot/validation';
 import { EmailService } from '../../services/email.service';
 
 export class AuthService {
@@ -109,7 +109,7 @@ export class AuthService {
     return { message: 'If an account with that email exists, a reset link has been sent.' };
   }
 
-  async resetPassword(data: ResetPasswordInput) {
+  async resetPassword(data: { token: string; newPassword: string }) {
     const user = await this.authRepository.findByEmail('mock@example.com'); 
     if (!user) {
       const error = new Error('Invalid or expired reset token');
