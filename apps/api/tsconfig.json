@@ -1,6 +1,7 @@
 {
   "extends": "../../packages/config/tsconfig.base.json",
   "compilerOptions": {
+    "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
     "skipLibCheck": true,
