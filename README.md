@@ -1,28 +1,72 @@
 # ProjectPilot
 
-ProjectPilot is an enterprise-grade, AI-powered project management platform. It combines the power of modern task management (Kanban, Sprints) with real-time collaboration (Chat, Notifications) and advanced AI assistance (Task generation, Risk analysis).
+ProjectPilot is a next-generation, enterprise-grade project management platform. It seamlessly blends robust task management features (like interactive Kanban boards and Sprint planning) with real-time collaboration tools (direct messaging, project chat rooms, and live notifications) and advanced AI assistance (automated task generation and project risk analysis).
 
-## Features
-- **Organization & Project Management**: Multi-tenant support with RBAC.
-- **Real-time Kanban Board**: Interactive drag-and-drop task management.
-- **Collaboration**: Instant messaging and project-wide notifications.
-- **AI Integration**: Automatic task generation and project risk analysis using OpenAI GPT-4o.
-- **Production Ready**: Dockerized setup, comprehensive testing, and API documentation.
+Designed for modern engineering and product teams, ProjectPilot provides a unified command center to streamline operations, reduce project bottlenecks, and boost team velocity.
+
+---
+
+## Key Features
+
+### 📋 Enterprise Task & Sprint Management
+* **Interactive Kanban Board**: Drag-and-drop workflow tracking with swimlanes, custom status columns, and tags.
+* **Sprint Cycles**: Plan sprint scopes, track team velocity, and view burndown metrics.
+* **Granular Task Details**: Define dependencies, estimate hours, log checklists, and write inline comments.
+
+### 💬 Real-Time Collaboration
+* **Direct Messaging**: Connect with any organization member instantly.
+* **Contextual Channels**: Automatic chat rooms generated per project and organization.
+* **Push Notifications**: Live updates for task assignments, status changes, and team mentions.
+
+### 🧠 Intelligent AI Assistant
+* **AI Project & Task Generator**: Prompt the AI to build complete task backlogs and structures based on high-level goals.
+* **Automated Risk Analysis**: Run risk analysis over task states and schedules to identify bottlenecks before they delay launch.
+
+### 🔐 Enterprise-Grade Architecture
+* **Multi-Tenancy**: Support for multiple organizations with clean data isolation.
+* **Role-Based Access Control (RBAC)**: Assign managers, team members, or client roles with distinct system permissions.
+* **Security First**: Input sanitization, CORS protection, secure token handling, and robust rate limiting.
+
+---
 
 ## Tech Stack
-- **Frontend**: Next.js 15, React, Tailwind CSS, ShadCN UI, Zustand, TanStack Query.
-- **Backend**: Node.js, Express, TypeScript.
-- **Database**: PostgreSQL with Prisma ORM.
-- **Real-time**: Socket.io.
-- **AI**: OpenAI API.
-- **DevOps**: Docker, Docker Compose, Playwright (E2E), Jest (Unit).
+
+* **Frontend**: Next.js 15, React 18, Tailwind CSS, Zustand, Axios.
+* **Backend**: Node.js, Express.js, TypeScript (compiled to CommonJS for production reliability).
+* **Database**: PostgreSQL with Prisma ORM.
+* **Caching & Limits**: Redis.
+* **Realtime Server**: Socket.io.
+
+---
 
 ## Getting Started
-See the [Deployment Guide](./DEPLOYMENT.md) for detailed instructions on setting up the project locally and in production.
+
+### Local Development Setup
+
+1. **Pre-requisites**: Ensure you have Node.js 18+, Docker, and PostgreSQL/Redis installed.
+2. **Environment Configuration**: Create a `.env` file in the root based on `.env.example`.
+3. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+4. **Prisma Generation**:
+   ```bash
+   npx prisma generate --schema=./packages/database/prisma/schema.prisma
+   ```
+5. **Run Services**:
+   ```bash
+   npm run dev
+   ```
+
+---
 
 ## API Documentation
-Once the API is running, you can access the Swagger documentation at:
+
+Once the backend is running, the Swagger API interactive documentation is available at:
 `http://localhost:4000/api-docs`
 
+---
+
 ## License
-MIT
+
+This project is licensed under the MIT License.
