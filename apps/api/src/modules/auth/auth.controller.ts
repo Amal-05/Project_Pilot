@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service';
-import { registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } from '@project-pilot/validation';
+import { registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema, googleSignInSchema } from '@project-pilot/validation';
 
 const authService = new AuthService();
 
@@ -61,6 +61,16 @@ export class AuthController {
   async getMe(req: any, res: Response, next: NextFunction) {
     try {
       res.status(200).json({ user: req.user });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async googleSignIn(req: Request, res: Response, next: NextFunction) {
+    try {
+      const validatedData = googleSignInSchema.parse(req.body);
+      const result = await authService.googleSignIn(validatedData);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }

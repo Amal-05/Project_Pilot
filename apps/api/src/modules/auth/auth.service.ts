@@ -122,4 +122,42 @@ export class AuthService {
 
     return { message: 'Password has been reset successfully' };
   }
+
+  async googleSignIn(data: { email: string; firstName?: string; lastName?: string; googleId: string; avatarUrl?: string }) {
+    let user = await this.authRepository.findByEmail(data.email);
+    if (user) {
+      if (!user.googleId) {
+        user = await this.authRepository.update(user.id, {
+          googleId: data.googleId,
+          avatarUrl: data.avatarUrl || user.avatarUrl,
+          isEmailVerified: true
+        });
+      }
+    } else {
+      user = await this.authRepository.create({
+        email: data.email,
+        firstName: data.firstName || 'Google',
+        lastName: data.lastName || 'User',
+        googleId: data.googleId,
+        avatarUrl: data.avatarUrl,
+        isEmailVerified: true,
+      });
+    }
+
+    const accessToken = generateAccessToken(user.id, user.role);
+    const refreshToken = generateRefreshToken(user.id);
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        avatarUrl: user.avatarUrl,
+      },
+      accessToken,
+      refreshToken,
+    };
+  }
 }

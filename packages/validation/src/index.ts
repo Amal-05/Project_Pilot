@@ -30,9 +30,18 @@ export const resetPasswordSchema = z.object({
   newPassword: z.string().min(8).max(100),
 });
 
+export const googleSignInSchema = z.object({
+  email: z.string().email(),
+  googleId: z.string(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  avatarUrl: z.string().optional(),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+export type GoogleSignInInput = z.infer<typeof googleSignInSchema>;
 // --- ORGANIZATION VALIDATION ---
 
 export const createOrganizationSchema = z.object({
