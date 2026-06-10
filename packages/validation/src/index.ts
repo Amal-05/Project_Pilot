@@ -31,11 +31,7 @@ export const resetPasswordSchema = z.object({
 });
 
 export const googleSignInSchema = z.object({
-  email: z.string().email(),
-  googleId: z.string(),
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  avatarUrl: z.string().optional(),
+  token: z.string().min(1),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

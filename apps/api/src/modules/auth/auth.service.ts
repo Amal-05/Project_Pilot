@@ -123,23 +123,43 @@ export class AuthService {
     return { message: 'Password has been reset successfully' };
   }
 
-  async googleSignIn(data: { email: string; firstName?: string; lastName?: string; googleId: string; avatarUrl?: string }) {
-    let user = await this.authRepository.findByEmail(data.email);
+  async googleSignIn(data: { token: string }) {
+    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${data.token}`);
+    if (!response.ok) {
+      const error = new Error('Invalid Google Token');
+      (error as any).statusCode = 400;
+      throw error;
+    }
+    const payload = (await response.json()) as any;
+
+    if (!payload.email) {
+      const error = new Error('Invalid Google Token payload: email missing');
+      (error as any).statusCode = 400;
+      throw error;
+    }
+
+    const email = payload.email;
+    const googleId = payload.sub;
+    const firstName = payload.given_name || 'Google';
+    const lastName = payload.family_name || 'User';
+    const avatarUrl = payload.picture;
+
+    let user = await this.authRepository.findByEmail(email);
     if (user) {
       if (!user.googleId) {
         user = await this.authRepository.update(user.id, {
-          googleId: data.googleId,
-          avatarUrl: data.avatarUrl || user.avatarUrl,
+          googleId,
+          avatarUrl: avatarUrl || user.avatarUrl,
           isEmailVerified: true
         });
       }
     } else {
       user = await this.authRepository.create({
-        email: data.email,
-        firstName: data.firstName || 'Google',
-        lastName: data.lastName || 'User',
-        googleId: data.googleId,
-        avatarUrl: data.avatarUrl,
+        email,
+        firstName,
+        lastName,
+        googleId,
+        avatarUrl,
         isEmailVerified: true,
       });
     }

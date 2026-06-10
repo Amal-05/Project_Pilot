@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
 import { useAuthStore } from "@/store/auth.store";
 import api from "@/lib/api";
 import { Shield, Lock, Mail, Loader2, ArrowRight } from "lucide-react";
@@ -15,7 +16,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showGoogleChooser, setShowGoogleChooser] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,24 +38,15 @@ export default function LoginPage() {
     }
   };
 
-  const triggerGoogleLogin = async (acc: { name: string; email: string; googleId: string }) => {
-    setShowGoogleChooser(false);
+  const handleGoogleCredentialResponse = async (response: any) => {
     setError("");
     setIsLoading(true);
 
     try {
-      const parts = acc.name.split(" ");
-      const firstName = parts[0] || "Google";
-      const lastName = parts.slice(1).join(" ") || "User";
-      
-      const response = await api.post("/auth/google", {
-        email: acc.email,
-        googleId: acc.googleId,
-        firstName,
-        lastName,
-        avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(acc.name)}`
+      const apiResponse = await api.post("/auth/google", {
+        token: response.credential
       });
-      const { user, accessToken, refreshToken } = response.data;
+      const { user, accessToken, refreshToken } = apiResponse.data;
       setAuth(user, accessToken, refreshToken);
       router.push("/dashboard");
     } catch (err: any) {
@@ -68,6 +59,32 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+
+  const initGoogle = () => {
+    if (typeof window !== "undefined" && (window as any).google) {
+      (window as any).google.accounts.id.initialize({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "565636040854-u3bggd2mif6dof4hldf1tvd1p4hic949.apps.googleusercontent.com",
+        callback: handleGoogleCredentialResponse,
+      });
+      
+      const parentElement = document.getElementById("google-signin-btn-container");
+      if (parentElement) {
+        (window as any).google.accounts.id.renderButton(parentElement, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          shape: "rectangular",
+          logo_alignment: "left",
+          width: 380
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    initGoogle();
+  }, []);
 
   return (
     <div className="min-h-screen flex bg-slate-50">
@@ -187,31 +204,9 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setShowGoogleChooser(true)}
-            className="w-full py-3 px-4 bg-white border border-slate-200 text-slate-700 rounded-xl font-medium shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all flex items-center justify-center space-x-2.5"
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path
-                fill="#EA4335"
-                d="M5.26620003,9.76453182 C6.19878753,6.93863636 8.85444377,4.90909091 12,4.90909091 C13.6909091,4.90909091 15.2181818,5.52272727 16.4136364,6.53636364 L19.9054545,3.04454545 C17.7818182,1.15909091 15.0272727,0 12,0 C7.37954545,0 3.39727273,2.65909091 1.45454545,6.54090909 L5.26620003,9.76453182 Z"
-              />
-              <path
-                fill="#4285F4"
-                d="M23.4900002,12.2727273 C23.4900002,11.4136364 23.4136365,10.5909091 23.2727274,9.81818182 L12,9.81818182 L12,14.4818182 L18.4545455,14.4818182 C18.1727273,16.0045455 17.3136364,17.2909091 16.0272727,18.1545455 L19.9054545,21.1590909 C22.1727273,19.0681818 23.4900002,15.9636364 23.4900002,12.2727273 Z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.26620003,9.76453182 C5.0227273,10.4909091 4.88636364,11.2681818 4.88636364,12.0727273 C4.88636364,12.8772727 5.0227273,13.6545455 5.26620003,14.3809091 L1.45454545,17.6045455 C0.527272727,15.7409091 0,13.6363636 0,12.0727273 C0,10.5090909 0.527272727,8.40454545 1.45454545,6.54090909 L5.26620003,9.76453182 Z"
-              />
-              <path
-                fill="#34A853"
-                d="M12,19.1818182 C8.85444377,19.1818182 6.19878753,17.1522727 5.26620003,14.3263636 L1.45454545,17.55 C3.39727273,21.4318182 7.37954545,24 12,24 C15.0272727,24 17.7818182,23.0136364 19.9054545,21.3272727 L16.0272727,18.3227273 C14.9318182,19.0590909 13.5772727,19.1818182 12,19.1818182 Z"
-              />
-            </svg>
-            <span>Continue with Google</span>
-          </button>
+          <div className="w-full flex justify-center mt-2">
+            <div id="google-signin-btn-container" className="w-full min-h-[44px]" />
+          </div>
 
           <p className="text-center text-sm text-slate-500 mt-8">
             Don't have an account?{" "}
@@ -224,98 +219,7 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-
-      {showGoogleChooser && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div className="p-6 text-center border-b border-slate-100">
-              <div className="flex justify-center mb-3">
-                <svg className="w-8 h-8" viewBox="0 0 24 24">
-                  <path
-                    fill="#EA4335"
-                    d="M5.26620003,9.76453182 C6.19878753,6.93863636 8.85444377,4.90909091 12,4.90909091 C13.6909091,4.90909091 15.2181818,5.52272727 16.4136364,6.53636364 L19.9054545,3.04454545 C17.7818182,1.15909091 15.0272727,0 12,0 C7.37954545,0 3.39727273,2.65909091 1.45454545,6.54090909 L5.26620003,9.76453182 Z"
-                  />
-                  <path
-                    fill="#4285F4"
-                    d="M23.4900002,12.2727273 C23.4900002,11.4136364 23.4136365,10.5909091 23.2727274,9.81818182 L12,9.81818182 L12,14.4818182 L18.4545455,14.4818182 C18.1727273,16.0045455 17.3136364,17.2909091 16.0272727,18.1545455 L19.9054545,21.1590909 C22.1727273,19.0681818 23.4900002,15.9636364 23.4900002,12.2727273 Z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.26620003,9.76453182 C5.0227273,10.4909091 4.88636364,11.2681818 4.88636364,12.0727273 C4.88636364,12.8772727 5.0227273,13.6545455 5.26620003,14.3809091 L1.45454545,17.6045455 C0.527272727,15.7409091 0,13.6363636 0,12.0727273 C0,10.5090909 0.527272727,8.40454545 1.45454545,6.54090909 L5.26620003,9.76453182 Z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12,19.1818182 C8.85444377,19.1818182 6.19878753,17.1522727 5.26620003,14.3263636 L1.45454545,17.55 C3.39727273,21.4318182 7.37954545,24 12,24 C15.0272727,24 17.7818182,23.0136364 19.9054545,21.3272727 L16.0272727,18.3227273 C14.9318182,19.0590909 13.5772727,19.1818182 12,19.1818182 Z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900">Sign in with Google</h3>
-              <p className="text-xs text-slate-500 mt-1">to continue to ProjectPilot</p>
-            </div>
-            
-            <div className="p-4 space-y-2 max-h-60 overflow-y-auto">
-              {[
-                { name: "Alex Rivera", email: "alex.rivera@gmail.com", avatar: "AR", googleId: "google-109283741" },
-                { name: "Sarah Chen", email: "sarah.chen@gmail.com", avatar: "SC", googleId: "google-283746192" },
-                { name: "Marcus Johnson", email: "marcus.j@gmail.com", avatar: "MJ", googleId: "google-374619283" }
-              ].map((acc) => (
-                <button
-                  key={acc.email}
-                  type="button"
-                  onClick={() => triggerGoogleLogin(acc)}
-                  className="w-full flex items-center space-x-3 p-3 rounded-2xl hover:bg-slate-50 active:bg-slate-100 transition-colors text-left"
-                >
-                  <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-700 font-semibold flex items-center justify-center text-sm border border-slate-200">
-                    {acc.avatar}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">{acc.name}</p>
-                    <p className="text-xs text-slate-500 truncate">{acc.email}</p>
-                  </div>
-                </button>
-              ))}
-
-              <div className="border-t border-slate-100 pt-3 mt-2">
-                <p className="text-xs font-semibold text-slate-400 px-3 mb-2">Or use another Google account</p>
-                <div className="px-3 space-y-2">
-                  <input
-                    type="email"
-                    placeholder="Enter email address"
-                    id="customGoogleEmail"
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        const val = (e.target as HTMLInputElement).value;
-                        if (val && val.includes('@')) {
-                          const name = val.split('@')[0];
-                          const firstName = name.charAt(0).toUpperCase() + name.slice(1);
-                          triggerGoogleLogin({
-                            name: `${firstName} User`,
-                            email: val,
-                            googleId: `google-custom-${Date.now()}`
-                          });
-                        }
-                      }
-                    }}
-                  />
-                  <p className="text-[10px] text-slate-400">Press Enter to sign in with this custom email</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-between text-xs text-slate-500">
-              <button type="button" onClick={() => setShowGoogleChooser(false)} className="hover:text-slate-800 transition-colors">
-                Cancel
-              </button>
-              <div className="flex space-x-2">
-                <a href="#" className="hover:underline">Privacy</a>
-                <span>&middot;</span>
-                <a href="#" className="hover:underline">Terms</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <Script src="https://accounts.google.com/gsi/client" onLoad={initGoogle} />
     </div>
   );
 }
