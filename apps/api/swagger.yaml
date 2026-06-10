@@ -23,7 +23,6 @@ paths:
       responses:
         '201':
           description: User registered successfully
-...
 components:
   schemas:
     RegisterInput:
