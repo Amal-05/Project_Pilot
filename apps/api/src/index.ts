@@ -23,29 +23,6 @@ import Redis from 'ioredis';
 
 dotenv.config();
 
-process.on('uncaughtException', (err) => {
-  console.error('!!! UNCAUGHT EXCEPTION DURING STARTUP !!!');
-  console.error(err);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('!!! UNHANDLED REJECTION DURING STARTUP !!!');
-  console.error('Promise:', promise, 'Reason:', reason);
-});
-
-console.log('--- STARTING UP PROJECT PILOT API ---');
-console.log('Environment diagnostics:', {
-  PORT: process.env.PORT,
-  NODE_ENV: process.env.NODE_ENV,
-  HAS_DATABASE_URL: !!process.env.DATABASE_URL,
-  DATABASE_URL_LEN: process.env.DATABASE_URL?.length || 0,
-  HAS_REDIS_URL: !!process.env.REDIS_URL,
-  REDIS_URL_LEN: process.env.REDIS_URL?.length || 0,
-  HAS_OPENAI_API_KEY: !!process.env.OPENAI_API_KEY,
-  HAS_JWT_SECRET: !!process.env.JWT_SECRET,
-  HAS_JWT_REFRESH_SECRET: !!process.env.JWT_REFRESH_SECRET,
-});
-
 const app = express();
 const httpServer = createServer(app);
 export const io = new Server(httpServer, {
