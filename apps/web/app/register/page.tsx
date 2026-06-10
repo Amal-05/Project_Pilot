@@ -36,10 +36,14 @@ export default function RegisterPage() {
       }, 2000);
     } catch (err: any) {
       console.error(err);
-      setError(
-        err.response?.data?.message || 
-        "Failed to register. That email might already be in use."
-      );
+      if (!err.response) {
+        setError("Network error: Unable to connect to the API server. Please check your connection.");
+      } else {
+        setError(
+          err.response?.data?.message || 
+          "Failed to register. Please try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }
